@@ -1,0 +1,241 @@
+package exam.dao;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.ibatis.session.SqlSession;
+
+import exam.mapper.BoardMapper;
+import exam.vo.AttachfileVo;
+import exam.vo.BoardVo;
+
+public class BoardDao {
+	
+	private static BoardDao instance = new BoardDao();
+	
+	public static BoardDao getInstance() {
+		return instance;
+	}
+
+	private BoardDao() {
+	}
+	
+	
+	// 게시판 새글번호 생성해서 가져오기
+	public int getBoardNum() {
+		int boardNum = 0;
+		
+		try (SqlSession sqlSession = DBManager.getSqlSessionFactory().openSession(false)) {
+			BoardMapper mapper = sqlSession.getMapper(BoardMapper.class);
+			boardNum = mapper.getBoardNum();
+		}
+		
+		return boardNum;
+	} // getBoardNum()
+	
+	
+	// 주글 insert 메소드
+	public void insert(BoardVo vo) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		
+		StringBuilder sb = new StringBuilder();
+		
+		try (SqlSession sqlSession = DBManager.getSqlSessionFactory().openSession(false)) {
+			BoardMapper mapper = sqlSession.getMapper(BoardMapper.class);
+			mapper.insertBoard(vo);
+		}
+		
+	} // insert()
+	
+	
+	// board 테이블의 전체 행 갯수 가져오기
+	public int getTotalCount() {
+		int count = 0;
+		
+		try (SqlSession sqlSession = DBManager.getSqlSessionFactory().openSession(false)) {
+			BoardMapper mapper = sqlSession.getMapper(BoardMapper.class);
+			count = mapper.getTotalCount();
+		} 
+		
+		return count;
+	} // getTotalCount()
+	
+	
+	// 게시판 글목록 가져오기
+	public List<BoardVo> getBoards(int startRow, int pageSize) {
+		List<BoardVo> list = null;
+		
+		try (SqlSession sqlSession = DBManager.getSqlSessionFactory().openSession(false)) {
+			BoardMapper mapper = sqlSession.getMapper(BoardMapper.class);
+			list = mapper.getBoards(startRow, pageSize);
+		}
+		
+		return list;
+	} // getBoards()
+	
+	
+	public BoardVo getBoardByNum(int num) {
+		BoardVo vo = null;
+		
+		try (SqlSession sqlSession = DBManager.getSqlSessionFactory().openSession(false)) {
+			BoardMapper mapper = sqlSession.getMapper(BoardMapper.class);
+			vo = mapper.getBoardByNum(num);
+		}
+		
+		return vo;
+	} // getBoardByNum()
+	
+	
+	// board테이블과 attachfile 테이블 조인해서 결과 리턴
+	public BoardVo getBoardAndAttachfilesByNum(int num) {
+		BoardVo boardVo = null;
+		List<AttachfileVo> attachList = new ArrayList<AttachfileVo>();
+		
+		try (SqlSession sqlSession = DBManager.getSqlSessionFactory().openSession(false)) {
+			BoardMapper mapper = sqlSession.getMapper(BoardMapper.class);
+			vo = mapper.getBoardAndAttachfilesByNum(num);
+		}
+		
+		
+		return boardVo;
+	} // getBoardAndAttachfilesByNum
+	
+	
+	
+	
+	// 특정글 조회수 1증가시키는 메소드
+	public void updateReadcount(int num) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		
+		String sql = "";
+		
+		try {
+			con = JdbcUtils.getConnection();
+			// sql문. num에 해당하는 글의 readcount 1증가하게 수정
+			sql  = "UPDATE board ";
+			sql += "SET readcount = readcount + 1 ";
+			sql += "WHERE num = ?";
+			
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, num);
+			// 실행
+			pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			JdbcUtils.close(con, pstmt);
+		}
+	} // updateReadcount()
+	
+	
+	public void update(BoardVo vo) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		
+		String sql = "";
+		
+		try (SqlSession sqlSession = DBManager.getSqlSessionFactory().openSession(true)){
+			
+		}
+		
+		
+	} // update()
+	
+	
+	
+	public void deleteByNum(int num) {
+	
+		try(SqlSession sqlSession = DBManager.getSqlSessionFactory().openSession(true)){
+			BoardMapper mapper = sqlSession.getMapper(BoardMapper.class);
+			mapper
+		}
+	} // deleteByNum()
+	
+	
+	// 답글쓰기
+	public void replyInsert(BoardVo vo) {
+		try(SqlSession sqlSession = DBManager.getSqlSessionFactory().openSession(false)){ // for auto-commit, openSession(false)
+			BoardMapper mapper = sqlSession.getMapper(BoardMapper.class);
+			int rowCount = mapper.updateReadcount(vo.getReRef(),vo.getReSeq());
+			if(rowCount ==0) {
+				sqlSession.rollback();
+				System.out.println("fail to update ReSeq...");
+				return;
+			}
+			
+			//get new-text number
+			int num = mapper.getBoardNum();
+			
+			
+			//ekqrmf insertgkf wjdqhfh vo tjfwjd
+			vo.setNum(num);
+			vo.setReLev(vo.getReLev()+1); //emfduTmrl level wmdrk
+			vo.setReSeq(vo.getReSeq()+1);
+			
+			mapper.insertBoard(vo);
+			rowcount = 
+			if(rowCount ==0) {
+				sqlSession.rollback();
+				System.out.println("fail to update ReSeq...");
+				return;
+			} //try
+			
+			sqlSession.commit();
+		}
+	} // replyInsert()
+	
+	
+	// 샘플 주글들을 insert하기
+	private void insertDummyRows(int count) {
+		// BoardVo 객체를 100개 준비하기
+		for (int i=1; i<=count; i++) {
+			BoardVo vo = new BoardVo();
+			
+			int num = getBoardNum(); // 새글번호 가져오기
+			
+			vo.setNum(num); // 기본키 항목
+			vo.setName("홍길동"+num);
+			vo.setPasswd("1234");
+			vo.setSubject("글제목" + num);
+			vo.setContent("글내용\n입니다. " + num);
+			vo.setReadcount(0);
+			vo.setRegDate(LocalDateTime.now());
+			vo.setReRef(num);
+			vo.setReLev(0);
+			vo.setReSeq(0);
+			
+			insert(vo); // dao객체의 insert() 활용해서 행 추가
+		} // for
+	} // insertDummyRow
+	
+	public static void main(String[] args) {
+		// 새글번호 생성 테스트
+		BoardDao dao = BoardDao.getInstance();
+		//System.out.println("새글번호: " + dao.getBoardNum());
+		
+		// 더미 레코드 100개 추가
+		//dao.insertDummyRows(500);
+		//System.out.println("새글번호: " + dao.getBoardNum());
+		
+		//BoardVo vo = dao.getBoardByNum(1);
+		//System.out.println(vo);
+		
+		//System.out.println(dao.getBoardNum());
+		
+		List<BoardVo> list = dao.getBoards(0, 10);
+		System.out.println(list);
+	}
+	
+	
+
+	
+	
+}

@@ -1,0 +1,16 @@
+<%@page import="com.google.gson.Gson"%>
+<%@page import="exam.dao.DeptEmpDao"%>
+<%@page import="java.util.List"%>
+<%@ page language="java" contentType="application/json; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+    <!-- json일땐 contenttype 유의할 것 -->
+<%
+	DeptEmpDao dao = DeptEmpDao.getInstance();
+
+	List<List<Object>> list = dao.getDeptNameAndCount();
+	//자바리스트를 json 배열리스트로 변환 --> gson
+	Gson gson = new Gson();
+	String str = gson.toJson(list);
+	System.out.println(str);
+%>
+<%=str %>

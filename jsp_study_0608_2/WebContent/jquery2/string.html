@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+	<button type="button">button</button>
+	<div id="container"></div>
+
+
+<script src="../js/jquery-3.5.1.js"></script>
+
+<script>
+	$('button').click(function(){
+		//Asynchronous(비동기) Javascript and XML(JSON)
+		$.ajax({
+			//async:false,//동기 // 응답이 올때 까지 기다림//성능적으로 ㅂ루w
+			url:'string1.jsp',
+			success : function(data){
+				console.log(data);
+				$('div').append("");
+			}
+			
+		});
+		alert(result);
+	});
+
+
+</script>
+</body>
+</html>

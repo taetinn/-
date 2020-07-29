@@ -1,0 +1,62 @@
+package exam.controller.restapi;
+
+import java.io.IOException;
+import java.util.Timer;
+
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+/**
+ * Servlet implementation class ReplyRestController
+ */
+@WebServlet(urlPatterns = "/api/reply", loadOnStartup = 1)
+public class ReplyRestController extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+       
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public ReplyRestController() {
+        super();
+        // TODO Auto-generated constructor stub
+    }
+
+	/**
+	 * @see Servlet#init(ServletConfig)
+	 */
+	public void init(ServletConfig config) throws ServletException {
+		
+		System.out.println("Init() ");
+		
+		ServletContext application = config.getServletContext(); //초기ㅗ하 작업 진행가능
+		application.setAttribute("timer", new Timer(true));
+	}
+
+	/**
+	 * @see Servlet#destroy()
+	 */
+	public void destroy() { //서ㅂ를 내리거나정리할 때
+		System.out.println(" destroy() "); 
+
+	}
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		response.getWriter().append("Served at: ").append(request.getContextPath());
+	}
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		doGet(request, response);
+	}
+
+	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	}
+	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+	}
+
+}

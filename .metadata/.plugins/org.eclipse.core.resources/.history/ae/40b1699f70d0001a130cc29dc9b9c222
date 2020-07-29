@@ -1,0 +1,13 @@
+package exam.dao;
+
+public class ReplyDao {
+		
+		private static ReplyDao instance = new ReplyDao();
+		
+		public static ReplyDao getInstance() {
+			return instance;
+		}
+
+		private ReplyDao() {}
+		
+}

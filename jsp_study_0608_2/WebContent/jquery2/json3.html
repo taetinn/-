@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	
+	<button type="button">버튼</button>
+	
+	<table border="1" style="width : 600px">
+		<thead>
+			<tr>
+				<th>글번호</th><th>글쓴이</th><th>글제목</th>
+			</tr>
+		</thead>
+		<tbody>
+			
+		</tbody>
+	</table>
+	<ul></ul>
+
+<script src="../js/jquery-3.5.1.js"></script>
+<script>
+	function process(data) {
+		console.log(typeof data);
+		console.log(data);
+		
+		// 전달받은 데이터가 list임 //화면처리 부분
+		var str = '';
+
+		$.each(data, function (index, board) {
+			str += '<tr>';
+			str += '	<td>' + board.num + '</td>';
+			str += '	<td>' + board.name + '</td>';
+			str += '	<td>' + board.num + '</td>';
+			str += '</tr>';
+		});
+		$('tbody').html(str);
+	}
+
+	
+	$('button').click(function () {
+		$.ajax({
+			url: 'json3.jsp',
+			data:{pageNum:2},
+			success: function (data) {
+				process(data);
+			}
+		});
+	});
+</script>
+</body>
+</html>
+
+
+
+

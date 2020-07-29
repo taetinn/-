@@ -1,0 +1,63 @@
+package exam.controller.restapi;
+
+import java.io.IOException;
+
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.google.gson.Gson;
+
+import exam.dao.ReplyDao;
+
+@WebServlet(urlPatterns = "/api/reply", loadOnStartup = 1)
+public class ReplyRestController extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+    
+	private ReplyDao replyDao;
+	private Gson gson; //Gson :  transfer java to json
+
+	public void init(ServletConfig config) throws ServletException {
+		
+		System.out.println("Init() ");
+		
+		replyDao = ReplyDao.getInstance();
+		gson = new Gson();
+		
+//		ServletContext application = config.getServletContext(); //초기ㅗ하 작업 진행가능
+//		application.setAttribute("timer", new Timer(true));
+	}
+
+	public void destroy() { //서ㅂ를 내리거나정리할 때
+		System.out.println(" destroy() "); 
+
+	}
+	
+	
+	//SQL : SELECT
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		System.out.println(" doGet() "); 
+
+	}
+
+	//SQL : INSERT
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		System.out.println(" doPost() "); 
+	}
+
+	//SQL : UPDATE
+	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		System.out.println(" doPut() "); 
+
+	}
+	
+	//SQL : DELETE
+	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		System.out.println(" doDelete() "); 
+
+	}
+
+}

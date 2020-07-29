@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<button type="button">button</button>
+	<div></div>
+	
+	<script src="../js/jquery-3.5.1.js"></script>
+	<script>
+	function process(data){
+		console.log(typeof data);
+		console.log(data);
+		console.log(data.name+', '+data.age);
+		
+		//태그(html/xml)가 아닌 js 객체(list or map)에 대한 each()처리
+		//data 가 map
+		$.each(data,function(key, value){
+			$('div').append(key+':'+value+'<br>');
+		});	
+		
+		
+	}
+	
+	$('button').click(function(){
+		 
+		$.ajax({
+			url : 'json.jsp', //요청할 주소
+			success: function(data){ //응답이 성공하면 호출될 함수
+				process(data);
+			}
+		});
+		
+	});
+	</script>
+</body>
+</html>

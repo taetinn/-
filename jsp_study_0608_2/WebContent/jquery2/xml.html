@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<button type="button">button</button>
+	<div></div>
+	
+	<script src="../js/jquery-3.5.1.js"></script>
+	<script>
+	function process(data){
+		console.log(typeof data);
+		console.log(data);
+		
+		$(data).find('board').each(function (){  // tag관련 찾는거는 find(), 배열리스트에 대해서는 for:each문 처럼 each()적용가능
+			var num = $(this).find('num').text(); //this는 board단위 각각의 요소를 의미 // board의 요소에서 num을 찾아 text로 가져오겠다
+			var name = $(this).find('name').text();
+			var subject = $(this).find('subject').text();
+			
+			$('div').append(num+':'+name+':'+subject);
+		});
+	}
+	
+	$('button').click(function(){
+		 
+		$.ajax({
+			url : 'xml.jsp',
+			method:'GET',
+			success: function(data){
+				process(data);
+			}
+		});
+		
+	});
+	</script>
+</body>
+</html>

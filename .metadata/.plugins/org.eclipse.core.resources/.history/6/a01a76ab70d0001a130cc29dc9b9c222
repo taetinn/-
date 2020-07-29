@@ -1,0 +1,30 @@
+package exam.dao;
+
+import org.apache.ibatis.session.SqlSession;
+
+import exam.domain.ReplyVo;
+import exam.mapper.BoardMapper;
+import exam.mapper.ReplyMapper;
+
+public class ReplyDao {
+		
+		private static ReplyDao instance = new ReplyDao();
+		
+		public static ReplyDao getInstance() {
+			return instance;
+		}
+
+		private ReplyDao() {}
+		
+		
+		public int add(ReplyVo replyVo) {
+			int cnt =0;
+			
+			try (SqlSession sqlSession = DBManager.getSqlSessionFactory().openSession(true)) {
+				ReplyMapper mapper = sqlSession.getMapper(BoardMapper.class);
+				cnt = mapper.insert(replyVo);
+			}
+			return cnt;
+		}//add()
+
+}
