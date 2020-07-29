@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace = "mapper.MemberMapper">
+
+	<insert id = "insertMem" useGeneratedKeys="true" keyProperty="no">
+		INSERT INTO member (id,passwd,name,auth,period,phone,gender,address,reg_date)
+		VALUES (#{id},#{passwd},#{name},#{auth},#{period},#{phone},#{gender},#{address},#{regDate})
+	</insert>
+	
+	<insert id="insertGx" parameterType="hashmap">
+		INSERT INTO gx(no,gx_type) values(#{no},#{gxType})
+		</insert>
+		
+	<select id="getCheckCfAuth" resultType="int">
+		SELECT COUNT(*) 
+		FROM GX, MEMBER 
+		WHERE gx.no = member.no and gx_type = 'crossfit' and gx.no=#{no}
+	</select>
+	<select id="getCheckAyAuth"  resultType="int">
+		SELECT COUNT(*) 
+		FROM GX, MEMBER 
+		WHERE gx.no = member.no and gx_type = 'yoga' and gx.no=#{no}
+	</select>
+	<select id="getCheckPilAuth"  resultType="int">
+		SELECT COUNT(*) 
+		FROM GX, MEMBER 
+		WHERE gx.no = member.no and gx_type = 'pilates' and gx.no=#{no}
+	</select>
+</mapper>
+
+<!-- useGeneratedKeys="true" keyProperty="member_id" -->
+<!-- 	INSERT INTO gx(id,gx_type) VALUES
+		<foreach collection="gxType" item="type" open="(" separator="," close=")">
+			()#{id}#{type}
+		</foreach> -->
